@@ -1,4 +1,4 @@
-# Firmadetaljer_iOS#
+# Firmadetaljer_iOS
 An iOS application for looking up company information for Norwegian companies.
 
 ##Todo##
