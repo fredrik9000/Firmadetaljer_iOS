@@ -43,12 +43,12 @@
         <!--Bedriftsinfo-->
         <scene sceneID="smW-Zh-WAh">
             <objects>
-                <tableViewController title="Bedriftsinfo" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="SearchFirmTableViewController" customModule="BedriftsInfo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Bedriftsinfo" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="SearchFirmTableViewController" customModule="Firmadetaljer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="r7i-6Z-zg0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableFooterView" contentMode="scaleToFill" misplaced="YES" id="7V1-J4-dk6">
+                        <view key="tableFooterView" contentMode="scaleToFill" id="7V1-J4-dk6">
                             <rect key="frame" x="0.0" y="66" width="375" height="471"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -119,7 +119,7 @@
         <!--Web View Controller-->
         <scene sceneID="fjs-oy-CVF">
             <objects>
-                <viewController id="bkQ-Ta-YsV" customClass="WebViewController" customModule="BedriftsInfo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="bkQ-Ta-YsV" customClass="WebViewController" customModule="Firmadetaljer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rVg-zp-Fsk"/>
                         <viewControllerLayoutGuide type="bottom" id="MvD-FE-ulv"/>
@@ -152,7 +152,7 @@
         <!--Firm Details Table View Controller-->
         <scene sceneID="zO8-wH-DYy">
             <objects>
-                <tableViewController storyboardIdentifier="FirmDetailsController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ibR-ig-9XB" customClass="FirmDetailsTableViewController" customModule="BedriftsInfo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FirmDetailsController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ibR-ig-9XB" customClass="FirmDetailsTableViewController" customModule="Firmadetaljer" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="dLz-kZ-QfQ"/>
                     <connections>
                         <segue destination="bkQ-Ta-YsV" kind="show" identifier="showWebView" id="r8D-LJ-snF"/>
@@ -164,6 +164,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="6S0-TO-JiA"/>
+        <segue reference="Tll-UG-LXB"/>
     </inferredMetricsTieBreakers>
 </document>

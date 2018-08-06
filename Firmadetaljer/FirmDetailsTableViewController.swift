@@ -75,11 +75,15 @@ class FirmDetailsTableViewController: UITableViewController {
 
         super.viewDidLoad()
         
-        self.title = "Firmadetaljer"
+        tableView.tableFooterView = UIView(frame: .zero)
+        
         var mainSection = SectionCellData(header: "Detaljer")
         
         if let navn = company?.navn {
             mainSection.cells.append(buildCell("Firmanavn", description: navn))
+            self.title = navn
+        } else {
+            self.title = "Firmadetaljer"
         }
         
         if let orgnr = company?.organisasjonsnummer {
