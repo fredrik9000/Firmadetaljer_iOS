@@ -36,7 +36,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
          No point in searching for the same scope and search text as the last search. After clicking away the alert message in case of a parse error, this function is triggered, therefore we need to check if scope and text have changed. */
         if !(newScope == scope && newSearchText == searchText) && newSearchText.count > 1 && (scope != "Org.nummer" || newSearchText.count == 9) {
             scope = newScope
-            searchText = newSearchText
+            saveList()
             filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
         }
     }
@@ -82,6 +82,23 @@ class SearchFirmTableViewController: UITableViewController {
     private var searchText = ""
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    var recentSearchHistory: SearchHistory = SearchHistory(companies: [])
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if let url = try? FileManager.default.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+            ).appendingPathComponent("SearchHistory.json") {
+            if let jsonData = try? Data(contentsOf: url), let savedSearchHistory = SearchHistory(json: jsonData) {
+                recentSearchHistory = savedSearchHistory
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,6 +180,8 @@ class SearchFirmTableViewController: UITableViewController {
                 controller.company = company
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                recentSearchHistory.companies.insert(company)
+                saveList()
             }
         }
     }
@@ -187,4 +206,20 @@ class SearchFirmTableViewController: UITableViewController {
         return cell
     }
     
+    func saveList() {
+        if let json = recentSearchHistory.json {
+            if let url = try? FileManager.default.url(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+                ).appendingPathComponent("SearchHistory.json") {
+                do {
+                    try json.write(to: url)
+                } catch let error {
+                    print("Couldn't save \(error)")
+                }
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@
 
 import Foundation
 
-class Company {
+class Company: Codable, Hashable {
     
     var organisasjonsnummer:Int?
     var navn:String?
@@ -37,19 +37,27 @@ class Company {
     var postadresse:Adresse?
     var forretningsadresse:Adresse?
     var beliggenhetsadresse:Adresse?
+    
+    var hashValue: Int {
+        return navn!.hashValue
+    }
+    
+    static func == (lhs: Company, rhs: Company) -> Bool {
+        return lhs.navn == rhs.navn && lhs.navn == rhs.navn
+    }
 }
 
-class InstitusjonellSektorkode {
+class InstitusjonellSektorkode: Codable {
     var kode: Int?
     var beskrivelse: String?
 }
 
-class Naeringskode {
+class Naeringskode: Codable {
     var kode: String?
     var beskrivelse: String?
 }
 
-class Adresse {
+class Adresse: Codable {
     var adresse: String?
     var postnummer: Int?
     var poststed: String?
