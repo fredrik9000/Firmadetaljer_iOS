@@ -8,6 +8,25 @@
 
 import UIKit
 
+class CustomSearchBar: UISearchBar {
+    
+    override func setShowsCancelButton(_ showsCancelButton: Bool, animated: Bool) {
+        super.setShowsCancelButton(false, animated: false)
+    }}
+
+class CustomSearchController: UISearchController {
+    lazy var _searchBar: CustomSearchBar = {
+        [unowned self] in
+        let customSearchBar = CustomSearchBar(frame: CGRect.zero)
+        return customSearchBar
+        }()
+    
+    override var searchBar: UISearchBar {
+        get {
+            return _searchBar
+        }
+    }}
+
 extension SearchFirmTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let newScope = searchController.searchBar.scopeButtonTitles![searchController.searchBar.selectedScopeButtonIndex]
@@ -31,7 +50,7 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
         } else if scope == FilterConstants.employeesMoreThan50Scope {
             searchController.searchBar.placeholder = "Firmanavn (Ansatte > 50)"
         } else {
-            searchController.searchBar.placeholder = "Firmanavn"
+            searchController.searchBar.placeholder = "Firmanavn (Alle)"
         }
         if let searchBarText = searchController.searchBar.text {
             if searchBarText.count > 1
@@ -42,16 +61,22 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
     }
 }
 
+extension SearchFirmTableViewController: UISearchControllerDelegate {
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.becomeFirstResponder()
+    }
+}
+
 class SearchFirmTableViewController: UITableViewController {
     
     private struct FilterConstants {
-        static let searchFirmScope = "Søk firma"
+        static let searchFirmScope = "Firmanavn (Alle)"
         static let employeesMoreThan50Scope = "Ansatte > 50"
         static let orgNumberScope = "Org.nummer"
     }
     
     private var filteredCompanies = [Company]()
-    let searchController = UISearchController(searchResultsController: nil)
+    let searchController = CustomSearchController(searchResultsController: nil)
     var detailViewController: FirmDetailsTableViewController? = nil
     private var scope = ""
     private var searchText = ""
@@ -70,16 +95,22 @@ class SearchFirmTableViewController: UITableViewController {
         
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Firmanavn"
+        searchController.searchBar.placeholder = "Firmanavn (Alle)"
         definesPresentationContext = true
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.employeesMoreThan50Scope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
         tableView.tableHeaderView = searchController.searchBar
+        searchController.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchController.isActive = true
     }
     
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
