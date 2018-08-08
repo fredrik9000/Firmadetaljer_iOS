@@ -54,10 +54,8 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
         scope = searchBar.scopeButtonTitles![selectedScope]
         if scope == FilterConstants.orgNumberScope {
             searchController.searchBar.placeholder = "Organisasjonsnummer(9 siffer)"
-        } else if scope == FilterConstants.employeesMoreThan50Scope {
-            searchController.searchBar.placeholder = "Firmanavn (Ansatte > 50)"
         } else {
-            searchController.searchBar.placeholder = "Firmanavn (Alle)"
+            searchController.searchBar.placeholder = "Firmanavn"
         }
         if let searchBarText = searchController.searchBar.text {
             if searchBarText.count > 1
@@ -84,8 +82,7 @@ extension SearchFirmTableViewController: UISearchControllerDelegate {
 class SearchFirmTableViewController: UITableViewController {
     
     private struct FilterConstants {
-        static let searchFirmScope = "Firmanavn (Alle)"
-        static let employeesMoreThan50Scope = "Ansatte > 50"
+        static let searchFirmScope = "Firmanavn"
         static let orgNumberScope = "Org.nummer"
     }
     
@@ -128,9 +125,9 @@ class SearchFirmTableViewController: UITableViewController {
         //Set up the search controller
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Firmanavn (Alle)"
+        searchController.searchBar.placeholder = "Firmanavn"
         definesPresentationContext = true
-        searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.employeesMoreThan50Scope, FilterConstants.orgNumberScope]
+        searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
         searchController.delegate = self
         
@@ -176,10 +173,7 @@ class SearchFirmTableViewController: UITableViewController {
         if (scope == FilterConstants.orgNumberScope) {
             url = "http://data.brreg.no/enhetsregisteret/enhet/\(searchText).json"
         } else {
-            var filter = "$filter=startswith(navn,'\(searchText)')"
-            if (scope == FilterConstants.employeesMoreThan50Scope) {
-                filter += " and antallAnsatte gt 50"
-            }
+            let filter = "$filter=startswith(navn,'\(searchText)')"
             url = "http://data.brreg.no/enhetsregisteret/enhet.json?" + filter
         }
         
