@@ -15,7 +15,7 @@
 		2062F0691CDA89CF00E1017E /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2062F0681CDA89CF00E1017E /* Company.swift */; };
 		2062F06B1CDC254000E1017E /* FirmDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2062F06A1CDC254000E1017E /* FirmDetailsTableViewController.swift */; };
 		207947CF1CED1BCF00E28170 /* JSONUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207947CE1CED1BCF00E28170 /* JSONUtil.swift */; };
-		208570522119EA820072F8C9 /* SearchHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208570512119EA820072F8C9 /* SearchHistory.swift */; };
+		208570522119EA820072F8C9 /* CompaniesViewedHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208570512119EA820072F8C9 /* CompaniesViewedHistory.swift */; };
 		20DEA1A11CDD878600BAF592 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DEA1A01CDD878600BAF592 /* WebViewController.swift */; };
 		20DEA1A51CDEA91C00BAF592 /* CompanyUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DEA1A41CDEA91C00BAF592 /* CompanyUtil.swift */; };
 /* End PBXBuildFile section */
@@ -31,7 +31,7 @@
 		2062F0681CDA89CF00E1017E /* Company.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		2062F06A1CDC254000E1017E /* FirmDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirmDetailsTableViewController.swift; sourceTree = "<group>"; };
 		207947CE1CED1BCF00E28170 /* JSONUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONUtil.swift; sourceTree = "<group>"; };
-		208570512119EA820072F8C9 /* SearchHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistory.swift; sourceTree = "<group>"; };
+		208570512119EA820072F8C9 /* CompaniesViewedHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesViewedHistory.swift; sourceTree = "<group>"; };
 		20DEA1A01CDD878600BAF592 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		20DEA1A41CDEA91C00BAF592 /* CompanyUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompanyUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,7 +90,7 @@
 			children = (
 				2062F0681CDA89CF00E1017E /* Company.swift */,
 				20DEA1A41CDEA91C00BAF592 /* CompanyUtil.swift */,
-				208570512119EA820072F8C9 /* SearchHistory.swift */,
+				208570512119EA820072F8C9 /* CompaniesViewedHistory.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 				20DEA1A11CDD878600BAF592 /* WebViewController.swift in Sources */,
 				20DEA1A51CDEA91C00BAF592 /* CompanyUtil.swift in Sources */,
 				2062F0691CDA89CF00E1017E /* Company.swift in Sources */,
-				208570522119EA820072F8C9 /* SearchHistory.swift in Sources */,
+				208570522119EA820072F8C9 /* CompaniesViewedHistory.swift in Sources */,
 				207947CF1CED1BCF00E28170 /* JSONUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

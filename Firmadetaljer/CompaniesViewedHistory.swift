@@ -8,22 +8,22 @@
 
 import Foundation
 
-struct SearchHistory: Codable {
-    var companies = Set<Company>()
+struct CompaniesViewedHistory: Codable {
+    var companies = [Company]()
     
     var json: Data? {
         return try? JSONEncoder().encode(self)
     }
     
     init?(json: Data) {
-        if let newValue = try? JSONDecoder().decode(SearchHistory.self, from: json) {
+        if let newValue = try? JSONDecoder().decode(CompaniesViewedHistory.self, from: json) {
             self = newValue
         } else {
             return nil
         }
     }
     
-    init(companies: Set<Company>) {
+    init(companies: [Company]) {
         self.companies = companies
     }
 }

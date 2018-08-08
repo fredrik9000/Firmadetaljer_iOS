@@ -38,6 +38,13 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
             scope = newScope
             saveList()
             filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
+        } else if newSearchText.count == 0 {
+            if self.tableView.style == .plain {
+                self.tableView = lastViewedCompaniesTableView
+                resultsTableView.tableHeaderView = nil
+                lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
+                searchController.searchBar.becomeFirstResponder()
+            }
         }
     }
 }
@@ -56,6 +63,13 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
             if searchBarText.count > 1
                 && (scope != "Org.nummer" || searchBar.text!.count == 9) {
                 filterContentForSearchText(searchText: searchBar.text!, scope: scope)
+            } else if searchBarText.count == 0 {
+                if self.tableView.style == .plain {
+                    self.tableView = lastViewedCompaniesTableView
+                    resultsTableView.tableHeaderView = nil
+                    lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
+                    searchController.searchBar.becomeFirstResponder()
+                }
             }
         }
     }
@@ -80,10 +94,11 @@ class SearchFirmTableViewController: UITableViewController {
     var detailViewController: FirmDetailsTableViewController? = nil
     private var scope = ""
     private var searchText = ""
+    private var resultsTableView: UITableView!
+    private var lastViewedCompaniesTableView: UITableView!
+    private var activityIndicator: UIActivityIndicatorView!
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
-    var recentSearchHistory: SearchHistory = SearchHistory(companies: [])
+    var lastViewedCompanies: CompaniesViewedHistory = CompaniesViewedHistory(companies: [])
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -93,9 +108,9 @@ class SearchFirmTableViewController: UITableViewController {
             in: .userDomainMask,
             appropriateFor: nil,
             create: true
-            ).appendingPathComponent("SearchHistory.json") {
-            if let jsonData = try? Data(contentsOf: url), let savedSearchHistory = SearchHistory(json: jsonData) {
-                recentSearchHistory = savedSearchHistory
+            ).appendingPathComponent("last_viewed_companies.json") {
+            if let jsonData = try? Data(contentsOf: url), let savedSearchHistory = CompaniesViewedHistory(json: jsonData) {
+                lastViewedCompanies = savedSearchHistory
             }
         }
     }
@@ -110,14 +125,39 @@ class SearchFirmTableViewController: UITableViewController {
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? FirmDetailsTableViewController
         }
         
+        //Set up the search controller
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Firmanavn (Alle)"
         definesPresentationContext = true
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.employeesMoreThan50Scope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
-        tableView.tableHeaderView = searchController.searchBar
         searchController.delegate = self
+        
+        //Metrics used for result and search history table views
+        let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
+        let displayWidth: CGFloat = self.view.frame.width
+        let displayHeight: CGFloat = self.view.frame.height
+        
+        //Set up table view used for results when searching
+        resultsTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight))
+        resultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ResultCell")
+        resultsTableView.dataSource = self
+        resultsTableView.delegate = self
+        
+        //Set up table view used for search history
+        lastViewedCompaniesTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight), style: .grouped)
+        lastViewedCompaniesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "PreviouslyViewedCompanyCell")
+        lastViewedCompaniesTableView.dataSource = self
+        lastViewedCompaniesTableView.delegate = self
+        lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
+        
+        //Display the search history by default
+        self.tableView = lastViewedCompaniesTableView
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -154,6 +194,12 @@ class SearchFirmTableViewController: UITableViewController {
     private func companiesParsed(_ companies: [Company]?) {
         if let comps = companies {
             self.filteredCompanies = comps
+            if self.tableView.style == .grouped {
+                self.tableView = resultsTableView
+                lastViewedCompaniesTableView.tableHeaderView = nil
+                resultsTableView.tableHeaderView = searchController.searchBar
+                searchController.searchBar.becomeFirstResponder()
+            }
             self.tableView.reloadData()
         } else {
             let alertTitle:String
@@ -173,14 +219,22 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
+        if segue.identifier == "showCompanyDetails" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                let company = filteredCompanies[indexPath.row]
+                let company: Company
+                if self.tableView.style == .plain {
+                    company = filteredCompanies[indexPath.row]
+                } else {
+                    company = lastViewedCompanies.companies[indexPath.row]
+                }
                 let controller = (segue.destination as! UINavigationController).topViewController as! FirmDetailsTableViewController
                 controller.company = company
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
-                recentSearchHistory.companies.insert(company)
+                if lastViewedCompanies.companies.contains(company) {
+                    lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.index(of: company)!)
+                }
+                lastViewedCompanies.companies.insert(company, at: 0)
                 saveList()
             }
         }
@@ -190,30 +244,53 @@ class SearchFirmTableViewController: UITableViewController {
         return 1
     }
     
-   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredCompanies.count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView.style == .plain {
+            return filteredCompanies.count
+        } else {
+            return lastViewedCompanies.companies.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if self.tableView.style == .grouped {
+            return "Last viewed"
+        } else {
+            return nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        let company = filteredCompanies[indexPath.row]
-        
-        if let navn = company.navn {
-            cell.textLabel?.text = navn
+        let cell: UITableViewCell
+        if self.tableView.style == .plain {
+            cell = tableView.dequeueReusableCell(withIdentifier: "ResultCell", for: indexPath)
+            
+            if let navn = filteredCompanies[indexPath.row].navn {
+                cell.textLabel?.text = navn
+            }
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "PreviouslyViewedCompanyCell", for: indexPath)
+            
+            if let navn = lastViewedCompanies.companies[indexPath.row].navn {
+                cell.textLabel?.text = navn
+            }
         }
         
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "showCompanyDetails", sender: indexPath)
+    }
+    
     func saveList() {
-        if let json = recentSearchHistory.json {
+        if let json = lastViewedCompanies.json {
             if let url = try? FileManager.default.url(
                 for: .applicationSupportDirectory,
                 in: .userDomainMask,
                 appropriateFor: nil,
                 create: true
-                ).appendingPathComponent("SearchHistory.json") {
+                ).appendingPathComponent("last_viewed_companies.json") {
                 do {
                     try json.write(to: url)
                 } catch let error {
