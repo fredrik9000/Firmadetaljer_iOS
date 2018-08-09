@@ -167,7 +167,6 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
-        
         var url :String
         if (scope == FilterConstants.orgNumberScope) {
             url = "http://data.brreg.no/enhetsregisteret/enhet/\(searchText).json"
@@ -229,6 +228,9 @@ class SearchFirmTableViewController: UITableViewController {
                 }
                 lastViewedCompanies.companies.insert(company, at: 0)
                 saveList()
+                if self.tableView.style == .grouped {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
