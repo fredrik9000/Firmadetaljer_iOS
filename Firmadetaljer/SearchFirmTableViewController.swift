@@ -152,6 +152,7 @@ class SearchFirmTableViewController: UITableViewController {
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         activityIndicator.center = view.center
+        activityIndicator.color = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         view.addSubview(activityIndicator)
     }
     
