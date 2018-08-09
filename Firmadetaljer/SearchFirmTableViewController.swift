@@ -270,6 +270,7 @@ class SearchFirmTableViewController: UITableViewController {
                 cell.textLabel?.text = navn
             }
         }
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
