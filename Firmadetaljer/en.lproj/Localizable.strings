@@ -1,0 +1,63 @@
+/* 
+  Localizable.strings
+  Firmadetaljer
+
+  Created by Fredrik Eilertsen on 8/8/18.
+  Copyright © 2018 Fredrik Eilertsen. All rights reserved.
+*/
+
+"Org.numberPlaceholder" = "Organization number(9 digits)";
+"FirmNamePlaceholder" = "Firm name";
+"OrganizationNumberScopeButton" = "Organization number";
+"FirmNameScopeButton" = "Firm name";
+"LastViewedCompanyHeader" = "Last viewed";
+"CompanyNotFoundTitle" = "Company not found";
+"CompanyNotFoundMessage" = "Couldn't find the company you were looking for. Wrong organization number?";
+"ErrorLoadingDataTitle" = "Error loading data";
+"ErrorLoadingDataMessage" = "Couldn't retrieve data. Do you have an internet connection?";
+"Yes" = "Yes";
+"No" = "No";
+
+"Detail-Section" = "Details";
+"Detail-FirmName" = "Firm name";
+"Detail-Org.number" = "Organization number";
+"Detail-DateOfEstablishment" = "Date of establishment";
+"Detail-Enhetsregisteret" = "Registered in enhetsregisteret";
+"Detail-StartingDate" = "Starting date";
+"Detail-ChangeOfOwnershipDate" = "Change of ownership";
+"Detail-OrganizationalForm" = "Organizational form";
+"Detail-Website" = "Website";
+"Detail-Frivillighetsregisteret" = "Registered in frivillighetsregisteret";
+"Detail-Mvaregisteret" = "Registered in Mvaregisteret";
+"Detail-Foretaksregisteret" = "Registered in foretaksregisteret";
+"Detail-Stiftelsesregisteret" = "Registered in stiftelsesregisteret";
+"Detail-Mvaregisteret-Voluntarily" = "Voluntarily registered in Mvaregisteret";
+"Detail-Employees" = "Number of employees";
+"Detail-LatestSubmittedAnnualAccounts" = "Latest submitted annual accounts";
+"Detail-Bankrupt" = "Bankrupt";
+"Detail-UnderLiquidation" = "Under Liquidation";
+"Detail-ForcedResolution" = "Under forced resolution";
+"Detail-Parent" = "Parent";
+"Detail-Code" = "Code";
+"Detail-Description" = "Description";
+
+"PostalAddress-Section" = "Postal address";
+"BusinessAddress-Section" = "Business address";
+"LocationAddress-Section" = "Location address";
+"Adresse-Address" = "Address";
+"Adresse-ZipCode" = "Zip code";
+"Adresse-City" = "City";
+"Adresse-MunicipalityNumber" = "Municipality number";
+"Adresse-Municipal" = "Municipal";
+"Adresse-CountryCode" = "Country code";
+"Adresse-Country" = "Country";
+
+"InstitutionalSectorCode-Section" = "Institutional Sector Code";
+"InstitutionalSectorCode-Code" = "Code";
+"InstitutionalSectorCode-Description" = "Description";
+
+"Naeringskode1-Section" = "Næringskode 1";
+"Naeringskode2-Section" = "Næringskode 2";
+"Naeringskode3-Section" = "Næringskode 3";
+"Naeringskode-Code" = "Code";
+"Naeringskode-Description" = "Description";

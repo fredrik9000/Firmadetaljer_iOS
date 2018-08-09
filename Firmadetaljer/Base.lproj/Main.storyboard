@@ -40,11 +40,11 @@
             </objects>
             <point key="canvasLocation" x="-856" y="-330"/>
         </scene>
-        <!--Bedriftsinfo-->
+        <!--Find firm-->
         <scene sceneID="smW-Zh-WAh">
             <objects>
-                <tableViewController title="Bedriftsinfo" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="SearchFirmTableViewController" customModule="Firmadetaljer" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Bedriftsinfo" id="Zdf-7t-Un8"/>
+                <tableViewController title="Find firm" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="SearchFirmTableViewController" customModule="Firmadetaljer" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" title="Find firm" id="Zdf-7t-Un8"/>
                     <connections>
                         <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showCompanyDetails" id="b1R-EC-ugH"/>
                     </connections>

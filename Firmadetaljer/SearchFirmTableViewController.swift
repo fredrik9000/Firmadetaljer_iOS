@@ -34,7 +34,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
         
         /* The web service returns an error message if the search text is 1 character.
          No point in searching for the same scope and search text as the last search. After clicking away the alert message in case of a parse error, this function is triggered, therefore we need to check if scope and text have changed. */
-        if !(newScope == scope && newSearchText == searchText) && newSearchText.count > 1 && (scope != "Org.nummer" || newSearchText.count == 9) {
+        if !(newScope == scope && newSearchText == searchText) && newSearchText.count > 1 && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || newSearchText.count == 9) {
             scope = newScope
             saveList()
             filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
@@ -53,13 +53,13 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         scope = searchBar.scopeButtonTitles![selectedScope]
         if scope == FilterConstants.orgNumberScope {
-            searchController.searchBar.placeholder = "Organisasjonsnummer(9 siffer)"
+            searchController.searchBar.placeholder = NSLocalizedString("Org.numberPlaceholder", comment: "")
         } else {
-            searchController.searchBar.placeholder = "Firmanavn"
+            searchController.searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
         }
         if let searchBarText = searchController.searchBar.text {
             if searchBarText.count > 1
-                && (scope != "Org.nummer" || searchBar.text!.count == 9) {
+                && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || searchBar.text!.count == 9) {
                 filterContentForSearchText(searchText: searchBar.text!, scope: scope)
             } else if searchBarText.count == 0 {
                 if self.tableView.style == .plain {
@@ -82,8 +82,8 @@ extension SearchFirmTableViewController: UISearchControllerDelegate {
 class SearchFirmTableViewController: UITableViewController {
     
     private struct FilterConstants {
-        static let searchFirmScope = "Firmanavn"
-        static let orgNumberScope = "Org.nummer"
+        static let searchFirmScope = NSLocalizedString("FirmNameScopeButton", comment: "")
+        static let orgNumberScope = NSLocalizedString("OrganizationNumberScopeButton", comment: "")
     }
     
     private var filteredCompanies = [Company]()
@@ -115,8 +115,6 @@ class SearchFirmTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Finn firma"
-        
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? FirmDetailsTableViewController
@@ -125,7 +123,7 @@ class SearchFirmTableViewController: UITableViewController {
         //Set up the search controller
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Firmanavn"
+        searchController.searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
         definesPresentationContext = true
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
@@ -199,11 +197,11 @@ class SearchFirmTableViewController: UITableViewController {
             let alertTitle:String
             let alertMessage:String
             if (self.scope == FilterConstants.orgNumberScope) {
-                alertTitle = "Company not found"
-                alertMessage = "Couldn't find the company you were looking for. Wrong number?" //Wrong org. number is the most likely issue.
+                alertTitle = NSLocalizedString("CompanyNotFoundTitle", comment: "")
+                alertMessage = NSLocalizedString("CompanyNotFoundMessage", comment: "") //Wrong org. number is the most likely issue.
             } else {
-                alertTitle = "Error loading data"
-                alertMessage = "Couldn't retrieve data. Do you have an internet connection?"
+                alertTitle = NSLocalizedString("ErrorLoadingDataTitle", comment: "")
+                alertMessage = NSLocalizedString("ErrorLoadingDataMessage", comment: "")
             }
             let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -248,7 +246,7 @@ class SearchFirmTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if self.tableView.style == .grouped {
-            return "Last viewed"
+            return NSLocalizedString("LastViewedCompanyHeader", comment: "")
         } else {
             return nil
         }

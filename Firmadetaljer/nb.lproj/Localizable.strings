@@ -1,0 +1,64 @@
+/* 
+  Localizable.strings
+  Firmadetaljer
+
+  Created by Fredrik Eilertsen on 8/8/18.
+  Copyright © 2018 Fredrik Eilertsen. All rights reserved.
+*/
+
+"Org.numberPlaceholder" = "Organisasjonsnummer(9 siffer)";
+"FirmNamePlaceholder" = "Firmanavn";
+"OrganizationNumberScopeButton" = "Organisasjonsnummer";
+"FirmNameScopeButton" = "Firmanavn";
+"LastViewedCompanyHeader" = "Sist sett";
+"CompanyNotFoundTitle" = "Company not found";
+"CompanyNotFoundMessage" = "Kunne ikke finne firma. Feil organisasjonsnummer?";
+"ErrorLoadingDataTitle" = "Feil ved lasting av data";
+"ErrorLoadingDataMessage" = "Kunne ikke hente data. Har du internet forbindelse?";
+"Yes" = "Ja";
+"No" = "Nei";
+
+"Detail-Section" = "Detaljer";
+"Detail-FirmName" = "Firmanavn";
+"Detail-Org.number" = "Organisasjonsnummer";
+"Detail-DateOfEstablishment" = "Stiftelsesdato";
+"Detail-Enhetsregisteret" = "Registrert i enhetsregisteret";
+"Detail-StartingDate" = "Oppstartsdato";
+"Detail-ChangeOfOwnershipDate" = "Eierskiftedato";
+"Detail-OrganizationalForm" = "Organisasjonsform";
+"Detail-Website" = "Hjemmeside";
+"Detail-Frivillighetsregisteret" = "Registrert i frivillighetsregisteret";
+"Detail-Mvaregisteret" = "Registrert i Mvaregisteret";
+"Detail-Foretaksregisteret" = "Registrert i foretaksregisteret";
+"Detail-Stiftelsesregisteret" = "Registrert i stiftelsesregisteret";
+"Detail-Mvaregisteret-Voluntarily" = "Frivillig registrert i Mvaregisteret";
+"Detail-Employees" = "Antall ansatte";
+"Detail-LatestSubmittedAnnualAccounts" = "Siste innsendte årsregnskap";
+"Detail-Bankrupt" = "Konkurs";
+"Detail-UnderLiquidation" = "Under avvikling";
+"Detail-ForcedResolution" = "Under tvangsavvikling/tvangsoppløsning";
+"Detail-Parent" = "Overordnet enhet";
+"Detail-Code" = "Kode";
+"Detail-Description" = "Beskrivelse";
+
+"PostalAddress-Section" = "Postadresse";
+"BusinessAddress-Section" = "Forretningsadresse";
+"LocationAddress-Section" = "Beliggenhetsadresse";
+"Adresse-Address" = "Adresse";
+"Adresse-ZipCode" = "Postnummer";
+"Adresse-City" = "Poststed";
+"Adresse-MunicipalityNumber" = "Kommunenummer";
+"Adresse-Municipal" = "Kommune";
+"Adresse-CountryCode" = "Landkode";
+"Adresse-Country" = "Land";
+
+"InstitutionalSectorCode-Section" = "Institusjonell sektorkode";
+"InstitutionalSectorCode-Code" = "Kode";
+"InstitutionalSectorCode-Description" = "Beskrivelse";
+
+"Naeringskode1-Section" = "Næringskode 1";
+"Naeringskode2-Section" = "Næringskode 2";
+"Naeringskode3-Section" = "Næringskode 3";
+"Naeringskode-Code" = "Kode";
+"Naeringskode-Description" = "Beskrivelse";
+
