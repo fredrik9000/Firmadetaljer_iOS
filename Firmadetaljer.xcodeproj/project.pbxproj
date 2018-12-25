@@ -152,6 +152,7 @@
 				TargetAttributes = {
 					2062F04F1CDA56BE00E1017E = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = Z65ZXSA84U;
 					};
 				};
 			};
@@ -348,6 +349,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Z65ZXSA84U;
 				INFOPLIST_FILE = Firmadetaljer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Fredrik.Firmadetaljer;
@@ -360,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = Z65ZXSA84U;
 				INFOPLIST_FILE = Firmadetaljer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Fredrik.Firmadetaljer;
