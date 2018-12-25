@@ -34,7 +34,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
         
         /* The web service returns an error message if the search text is 1 character.
          No point in searching for the same scope and search text as the last search. After clicking away the alert message in case of a parse error, this function is triggered, therefore we need to check if scope and text have changed. */
-        if !(newScope == scope && newSearchText == searchText) && newSearchText.count > 1 && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || newSearchText.count == 9) {
+        if !(newScope == scope && newSearchText == oldSearchText) && newSearchText.count > 1 && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || newSearchText.count == 9) {
             scope = newScope
             saveList()
             filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
@@ -46,6 +46,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
                 searchController.searchBar.becomeFirstResponder()
             }
         }
+        oldSearchText = newSearchText
     }
 }
 
@@ -90,7 +91,7 @@ class SearchFirmTableViewController: UITableViewController {
     let searchController = CustomSearchController(searchResultsController: nil)
     var detailViewController: FirmDetailsTableViewController? = nil
     private var scope = ""
-    private var searchText = ""
+    private var oldSearchText = ""
     private var resultsTableView: UITableView!
     private var lastViewedCompaniesTableView: UITableView!
     private var activityIndicator: UIActivityIndicatorView!
