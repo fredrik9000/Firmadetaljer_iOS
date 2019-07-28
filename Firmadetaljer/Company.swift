@@ -43,7 +43,7 @@ class Company: Codable, Hashable {
     }
     
     static func == (lhs: Company, rhs: Company) -> Bool {
-        return lhs.navn == rhs.navn && lhs.navn == rhs.navn
+        return lhs.navn == rhs.navn
     }
 }
 
