@@ -36,7 +36,6 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
          No point in searching for the same scope and search text as the last search. After clicking away the alert message in case of a parse error, this function is triggered, therefore we need to check if scope and text have changed. */
         if !(newScope == scope && newSearchText == oldSearchText) && newSearchText.count > 1 && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || newSearchText.count == 9) {
             scope = newScope
-            saveList()
             filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
         } else if newSearchText.count == 0 {
             if self.tableView.style == .plain {
