@@ -17,6 +17,7 @@
 "ErrorLoadingDataMessage" = "Kunne ikke hente data. Har du internet forbindelse?";
 "Yes" = "Ja";
 "No" = "Nei";
+"OnboardingMessage" = "Søk på navn eller organisasjonsnummer for å se firmadetaljer";
 
 "Detail-Section" = "Detaljer";
 "Detail-FirmName" = "Firmanavn";

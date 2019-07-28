@@ -17,6 +17,7 @@
 "ErrorLoadingDataMessage" = "Couldn't retrieve data. Do you have an internet connection?";
 "Yes" = "Yes";
 "No" = "No";
+"OnboardingMessage" = "Search by name or organization number to view firm details";
 
 "Detail-Section" = "Details";
 "Detail-FirmName" = "Firm name";
