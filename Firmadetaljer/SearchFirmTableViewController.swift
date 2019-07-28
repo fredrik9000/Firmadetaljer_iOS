@@ -230,17 +230,12 @@ class SearchFirmTableViewController: UITableViewController {
         if tableView.style == .plain {
             return filteredCompanies.count
         } else {
-            if lastViewedCompanies.companies.count == 0 {
-                self.tableView.setOnboardingMessage(NSLocalizedString("OnboardingMessage", comment: ""))
-            } else {
-                self.tableView.restore()
-            }
             return lastViewedCompanies.companies.count
         }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.tableView.style == .grouped && lastViewedCompanies.companies.count > 0 {
+        if self.tableView.style == .grouped {
             return NSLocalizedString("LastViewedCompanyHeader", comment: "")
         } else {
             return nil
@@ -286,24 +281,5 @@ class SearchFirmTableViewController: UITableViewController {
                 }
             }
         }
-    }
-}
-
-extension UITableView {
-    func setOnboardingMessage(_ message: String) {
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
-        messageLabel.text = message
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = .center;
-        messageLabel.font = UIFont.systemFont(ofSize: 32)
-        messageLabel.sizeToFit()
-        
-        self.backgroundView = messageLabel;
-        self.separatorStyle = .none;
-    }
-    
-    func restore() {
-        self.backgroundView = nil
-        self.separatorStyle = .singleLine
     }
 }
