@@ -8,64 +8,46 @@
 
 import UIKit
 
-class CustomSearchBar: UISearchBar {
-    
-    override func setShowsCancelButton(_ showsCancelButton: Bool, animated: Bool) {
-        super.setShowsCancelButton(false, animated: false)
-    }}
-
-class CustomSearchController: UISearchController {
-    lazy var _searchBar: CustomSearchBar = {
-        [unowned self] in
-        let customSearchBar = CustomSearchBar(frame: CGRect.zero)
-        return customSearchBar
-        }()
-    
-    override var searchBar: UISearchBar {
-        get {
-            return _searchBar
-        }
-    }}
-
 extension SearchFirmTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        let newScope = searchController.searchBar.scopeButtonTitles![searchController.searchBar.selectedScopeButtonIndex]
         let newSearchText = searchController.searchBar.text!
         
-        /* The web service returns an error message if the search text is 1 character.
-         No point in searching for the same scope and search text as the last search. After clicking away the alert message in case of a parse error, this function is triggered, therefore we need to check if scope and text have changed. */
-        if !(newScope == scope && newSearchText == oldSearchText) && newSearchText.count > 1 && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || newSearchText.count == 9) {
-            scope = newScope
-            filterContentForSearchText(searchText: searchController.searchBar.text!, scope:scope)
+        // The web service returns an error message if the search text is 1 character so this must be prevented.
+        // This will also be triggered after clicking away the alert message in case of a parse error,
+        // so the same search should not be performed twice as it is not needed.
+        if newSearchText != oldSearchText && isValidSearchQuery(searchText: newSearchText) {
+            filterContentForSearchText(searchText: searchController.searchBar.text!, scope:currentScope)
         } else if newSearchText.count == 0 {
+            // In case the search field is blank, show last view companies.
+            // If the tableview style is .grouped it is already being viewed.
             if self.tableView.style == .plain {
                 self.tableView = lastViewedCompaniesTableView
-                resultsTableView.tableHeaderView = nil
-                lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
                 searchController.searchBar.becomeFirstResponder()
             }
         }
+        // Keep track of the last searched text
         oldSearchText = newSearchText
     }
 }
 
 extension SearchFirmTableViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        scope = searchBar.scopeButtonTitles![selectedScope]
-        if scope == FilterConstants.orgNumberScope {
-            searchController.searchBar.placeholder = NSLocalizedString("Org.numberPlaceholder", comment: "")
+        currentScope = searchBar.scopeButtonTitles![selectedScope]
+        if currentScope == FilterConstants.orgNumberScope {
+            searchBar.placeholder = NSLocalizedString("Org.numberPlaceholder", comment: "")
         } else {
-            searchController.searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
+            searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
         }
-        if let searchBarText = searchController.searchBar.text {
-            if searchBarText.count > 1
-                && (scope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || searchBar.text!.count == 9) {
-                filterContentForSearchText(searchText: searchBar.text!, scope: scope)
+        
+        // When changing scope we do another search so that the result is updated to match the current scope and text
+        if let searchBarText = searchBar.text {
+            if isValidSearchQuery(searchText: searchBarText) {
+                filterContentForSearchText(searchText: searchBar.text!, scope: currentScope)
             } else if searchBarText.count == 0 {
+                // In case the search field is blank, show last view companies.
+                // If the tableview style is .grouped it is already being viewed.
                 if self.tableView.style == .plain {
                     self.tableView = lastViewedCompaniesTableView
-                    resultsTableView.tableHeaderView = nil
-                    lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
                     searchController.searchBar.becomeFirstResponder()
                 }
             }
@@ -87,10 +69,10 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     private var filteredCompanies = [Company]()
-    let searchController = CustomSearchController(searchResultsController: nil)
+    let searchController = UISearchController(searchResultsController: nil)
     var detailViewController: FirmDetailsTableViewController? = nil
-    private var scope = ""
-    private var oldSearchText = ""
+    private var currentScope = FilterConstants.searchFirmScope // Initial scope
+    private var oldSearchText = "" // Initial search text
     private var resultsTableView: UITableView!
     private var lastViewedCompaniesTableView: UITableView!
     private var activityIndicator: UIActivityIndicatorView!
@@ -122,14 +104,15 @@ class SearchFirmTableViewController: UITableViewController {
         
         //Set up the search controller
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
+        navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
         searchController.delegate = self
         
-        //Metrics used for result and search history table views
+        //Metrics used for result and last viewed companies table views
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
@@ -145,9 +128,8 @@ class SearchFirmTableViewController: UITableViewController {
         lastViewedCompaniesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "PreviouslyViewedCompanyCell")
         lastViewedCompaniesTableView.dataSource = self
         lastViewedCompaniesTableView.delegate = self
-        lastViewedCompaniesTableView.tableHeaderView = searchController.searchBar
         
-        //Display the search history by default
+        //Display the last viewed companies by default
         self.tableView = lastViewedCompaniesTableView
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
@@ -166,6 +148,11 @@ class SearchFirmTableViewController: UITableViewController {
         searchController.isActive = true
     }
     
+    private func isValidSearchQuery(searchText: String) -> Bool {
+        return searchText.count > 1
+            && (currentScope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || searchText.count == 9)
+    }
+    
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
         var url :String
         if (scope == FilterConstants.orgNumberScope) {
@@ -180,23 +167,23 @@ class SearchFirmTableViewController: UITableViewController {
         if !activityIndicator.isAnimating {
             self.activityIndicator.startAnimating()
         }
-        JSONUtil.retrieveCompanies(encodedURL, isOrgNumberSearch: scope == FilterConstants.orgNumberScope) { self.companiesParsed($0) }
+        JSONUtil.retrieveCompanies(encodedURL, isOrgNumberSearch: scope == FilterConstants.orgNumberScope) { self.handleCompaniesSearchResult($0) }
     }
     
-    private func companiesParsed(_ companies: [Company]?) {
+    private func handleCompaniesSearchResult(_ companies: [Company]?) {
+        // When there is no error searching, keep track of filtered companies and reload the table view.
+        // Otherwise, show and error message.
         if let comps = companies {
             self.filteredCompanies = comps
             if self.tableView.style == .grouped {
                 self.tableView = resultsTableView
-                lastViewedCompaniesTableView.tableHeaderView = nil
-                resultsTableView.tableHeaderView = searchController.searchBar
                 searchController.searchBar.becomeFirstResponder()
             }
             self.tableView.reloadData()
         } else {
             let alertTitle:String
             let alertMessage:String
-            if (self.scope == FilterConstants.orgNumberScope) {
+            if (self.currentScope == FilterConstants.orgNumberScope) {
                 alertTitle = NSLocalizedString("CompanyNotFoundTitle", comment: "")
                 alertMessage = NSLocalizedString("CompanyNotFoundMessage", comment: "") //Wrong org. number is the most likely issue.
             } else {

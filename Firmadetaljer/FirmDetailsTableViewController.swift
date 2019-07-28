@@ -10,6 +10,8 @@ import UIKit
 
 class FirmDetailsTableViewController: UITableViewController {
     
+    var company: Company?
+
     private struct SectionCellData {
         var cells = [UITableViewCell]()
         var header:String
@@ -19,7 +21,6 @@ class FirmDetailsTableViewController: UITableViewController {
         }
     }
     
-    var company: Company?
     private var sections = [SectionCellData]()
     
     private func buildCell(_ name:String, description:String) -> UITableViewCell {
@@ -30,6 +31,7 @@ class FirmDetailsTableViewController: UITableViewController {
         return cell
     }
     
+    // Most cells are not interactive, except for when navigating to the homepage or parent company
     private func buildNonInteractiveCell(_ name:String, description:String) -> UITableViewCell {
         let cell = buildCell(name, description: description)
         cell.isUserInteractionEnabled = false
@@ -229,21 +231,15 @@ class FirmDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return sections[section].cells.count
-        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         return sections[indexPath.section].cells[indexPath.row]
-        
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
         return sections[section].header
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -275,10 +271,10 @@ class FirmDetailsTableViewController: UITableViewController {
         guard let encodedURL = "http://data.brreg.no/enhetsregisteret/enhet/\(organisasjonsnummer).json".addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else {
             print("Couldn't encode URL"); return
         }
-        JSONUtil.retrieveCompany(encodedURL) { self.companyParsed($0) }
+        JSONUtil.retrieveCompany(encodedURL) { self.navigateToParentCompany($0) }
     }
     
-    private func companyParsed(_ company: Company?) {
+    private func navigateToParentCompany(_ company: Company?) {
         if let comp = company {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "FirmDetailsController") as! FirmDetailsTableViewController
             vc.company = comp
