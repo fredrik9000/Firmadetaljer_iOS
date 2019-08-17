@@ -22,7 +22,6 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
             // If the tableview style is .grouped it is already being viewed.
             if self.tableView.style == .plain {
                 self.tableView = lastViewedCompaniesTableView
-                searchController.searchBar.becomeFirstResponder()
             }
         }
         // Keep track of the last searched text
@@ -48,7 +47,6 @@ extension SearchFirmTableViewController: UISearchBarDelegate {
                 // If the tableview style is .grouped it is already being viewed.
                 if self.tableView.style == .plain {
                     self.tableView = lastViewedCompaniesTableView
-                    searchController.searchBar.becomeFirstResponder()
                 }
             }
         }
@@ -102,7 +100,7 @@ class SearchFirmTableViewController: UITableViewController {
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? FirmDetailsTableViewController
         }
         
-        //Set up the search controller
+        // Set up the search controller
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = NSLocalizedString("FirmNamePlaceholder", comment: "")
@@ -111,25 +109,25 @@ class SearchFirmTableViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
         searchController.delegate = self
-        
+
         //Metrics used for result and last viewed companies table views
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
         
-        //Set up table view used for results when searching
+        // Set up table view used for results when searching
         resultsTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight))
         resultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ResultCell")
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         
-        //Set up table view used for search history
+        // Set up table view used for search history
         lastViewedCompaniesTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight), style: .grouped)
         lastViewedCompaniesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "PreviouslyViewedCompanyCell")
         lastViewedCompaniesTableView.dataSource = self
         lastViewedCompaniesTableView.delegate = self
         
-        //Display the last viewed companies by default
+        // Display the last viewed companies by default
         self.tableView = lastViewedCompaniesTableView
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
@@ -177,7 +175,6 @@ class SearchFirmTableViewController: UITableViewController {
             self.filteredCompanies = comps
             if self.tableView.style == .grouped {
                 self.tableView = resultsTableView
-                searchController.searchBar.becomeFirstResponder()
             }
             self.tableView.reloadData()
         } else {
@@ -212,11 +209,17 @@ class SearchFirmTableViewController: UITableViewController {
                 controller.navigationItem.leftItemsSupplementBackButton = true
                 if lastViewedCompanies.companies.contains(company) {
                     lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.index(of: company)!)
+                    if self.tableView.style == .grouped && indexPath.row != 0 {
+                        tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.top)
+                    }
                 }
                 lastViewedCompanies.companies.insert(company, at: 0)
                 saveList()
                 if self.tableView.style == .grouped {
-                    self.tableView.reloadData()
+                    if indexPath.row != 0 {
+                        tableView.insertRows(at:  [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+                        tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.top)
+                    }
                 }
             }
         }
