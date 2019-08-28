@@ -24,7 +24,7 @@ class FirmDetailsTableViewController: UITableViewController {
     private var sections = [SectionCellData]()
     
     private func buildCell(_ name:String, description:String) -> UITableViewCell {
-        let cell = UITableViewCell.init(style: UITableViewCellStyle.value1, reuseIdentifier: "Cell")
+        let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "Cell")
         cell.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
         cell.textLabel?.text = name
         cell.detailTextLabel?.text = description
@@ -118,7 +118,7 @@ class FirmDetailsTableViewController: UITableViewController {
         
         if let hjemmeside = company?.hjemmeside {
             let hjemmesideCell = buildCell(NSLocalizedString("Detail-Website", comment: ""), description: hjemmeside)
-            hjemmesideCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            hjemmesideCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
             mainSection.cells.append(hjemmesideCell)
         }
         
@@ -164,7 +164,7 @@ class FirmDetailsTableViewController: UITableViewController {
         
         if let overordnetEnhet = company?.overordnetEnhet {
             let overordnetEnhetCell = buildCell(NSLocalizedString("Detail-Parent", comment: ""), description: String(overordnetEnhet))
-            overordnetEnhetCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            overordnetEnhetCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
             mainSection.cells.append(overordnetEnhetCell)
         }
         

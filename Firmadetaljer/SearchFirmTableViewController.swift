@@ -130,7 +130,7 @@ class SearchFirmTableViewController: UITableViewController {
         // Display the last viewed companies by default
         self.tableView = lastViewedCompaniesTableView
         
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.whiteLarge)
         activityIndicator.center = view.center
         activityIndicator.color = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         view.addSubview(activityIndicator)
@@ -208,17 +208,17 @@ class SearchFirmTableViewController: UITableViewController {
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
                 if lastViewedCompanies.companies.contains(company) {
-                    lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.index(of: company)!)
+                    lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.firstIndex(of: company)!)
                     if self.tableView.style == .grouped && indexPath.row != 0 {
-                        tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.top)
+                        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.top)
                     }
                 }
                 lastViewedCompanies.companies.insert(company, at: 0)
                 saveList()
                 if self.tableView.style == .grouped {
                     if indexPath.row != 0 {
-                        tableView.insertRows(at:  [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
-                        tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.top)
+                        tableView.insertRows(at:  [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.automatic)
+                        tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.top)
                     }
                 }
             }

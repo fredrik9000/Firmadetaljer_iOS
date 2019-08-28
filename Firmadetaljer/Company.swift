@@ -38,12 +38,12 @@ class Company: Codable, Hashable {
     var forretningsadresse:Adresse?
     var beliggenhetsadresse:Adresse?
     
-    var hashValue: Int {
-        return navn!.hashValue
+    static func == (lhs: Company, rhs: Company) -> Bool {
+        return lhs.organisasjonsnummer == rhs.organisasjonsnummer
     }
     
-    static func == (lhs: Company, rhs: Company) -> Bool {
-        return lhs.navn == rhs.navn
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(organisasjonsnummer)
     }
 }
 

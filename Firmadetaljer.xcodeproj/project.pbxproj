@@ -153,16 +153,18 @@
 					2062F04F1CDA56BE00E1017E = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = Z65ZXSA84U;
+						LastSwiftMigration = 1030;
 					};
 				};
 			};
 			buildConfigurationList = 2062F04B1CDA56BE00E1017E /* Build configuration list for PBXProject "Firmadetaljer" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				nb,
 			);
 			mainGroup = 2062F0471CDA56BE00E1017E;
 			productRefGroup = 2062F0511CDA56BE00E1017E /* Products */;
@@ -355,7 +357,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Fredrik.Firmadetaljer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -369,7 +371,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Fredrik.Firmadetaljer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
