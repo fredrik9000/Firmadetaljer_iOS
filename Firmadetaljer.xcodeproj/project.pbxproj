@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		200CD46F23173FB5003377C0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 200CD46E23173FB5003377C0 /* WebKit.framework */; };
 		2062F0541CDA56BE00E1017E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2062F0531CDA56BE00E1017E /* AppDelegate.swift */; };
 		2062F0561CDA56BE00E1017E /* SearchFirmTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2062F0551CDA56BE00E1017E /* SearchFirmTableViewController.swift */; };
 		2062F05B1CDA56BE00E1017E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2062F0591CDA56BE00E1017E /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		200CD46E23173FB5003377C0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2062F0501CDA56BE00E1017E /* Firmadetaljer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Firmadetaljer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2062F0531CDA56BE00E1017E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2062F0551CDA56BE00E1017E /* SearchFirmTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFirmTableViewController.swift; sourceTree = "<group>"; };
@@ -46,17 +48,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				200CD46F23173FB5003377C0 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		200CD46D23173FB5003377C0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				200CD46E23173FB5003377C0 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		2062F0471CDA56BE00E1017E = {
 			isa = PBXGroup;
 			children = (
 				2062F0521CDA56BE00E1017E /* Firmadetaljer */,
 				2062F0511CDA56BE00E1017E /* Products */,
+				200CD46D23173FB5003377C0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
