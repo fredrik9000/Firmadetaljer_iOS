@@ -25,7 +25,6 @@ class FirmDetailsTableViewController: UITableViewController {
     
     private func buildCell(_ name:String, description:String) -> UITableViewCell {
         let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "Cell")
-        cell.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
         cell.textLabel?.text = name
         cell.detailTextLabel?.text = description
         return cell
