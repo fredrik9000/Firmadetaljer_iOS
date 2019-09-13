@@ -77,6 +77,12 @@ class SearchFirmTableViewController: UITableViewController {
     
     var lastViewedCompanies: CompaniesViewedHistory = CompaniesViewedHistory(companies: [])
     
+    @IBAction func deleteSearch(_ sender: Any) {
+        lastViewedCompanies.companies = []
+        self.tableView.reloadData()
+        saveList()
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
