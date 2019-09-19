@@ -15,6 +15,7 @@
 "CompanyNotFoundMessage" = "Kunne ikke finne firma. Feil organisasjonsnummer?";
 "ErrorLoadingDataTitle" = "Feil ved lasting av data";
 "ErrorLoadingDataMessage" = "Kunne ikke hente data. Har du internet forbindelse?";
+"ClearSearchHistory" = "Slett søkehistorikk";
 "Yes" = "Ja";
 "No" = "Nei";
 

@@ -75,6 +75,8 @@ class SearchFirmTableViewController: UITableViewController {
     private var lastViewedCompaniesTableView: UITableView!
     private var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var clearSearchHistoryButton: UIBarButtonItem!
+    
     var lastViewedCompanies: CompaniesViewedHistory = CompaniesViewedHistory(companies: [])
     
     @IBAction func deleteSearch(_ sender: Any) {
@@ -139,6 +141,8 @@ class SearchFirmTableViewController: UITableViewController {
         activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.whiteLarge)
         activityIndicator.center = view.center
         view.addSubview(activityIndicator)
+        
+        clearSearchHistoryButton.title = NSLocalizedString("ClearSearchHistory", comment: "")
     }
     
     override func viewWillAppear(_ animated: Bool) {

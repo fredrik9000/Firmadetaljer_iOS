@@ -15,6 +15,7 @@
 "CompanyNotFoundMessage" = "Couldn't find the company you were looking for. Wrong organization number?";
 "ErrorLoadingDataTitle" = "Error loading data";
 "ErrorLoadingDataMessage" = "Couldn't retrieve data. Do you have an internet connection?";
+"ClearSearchHistory" = "Clear search history";
 "Yes" = "Yes";
 "No" = "No";
 
