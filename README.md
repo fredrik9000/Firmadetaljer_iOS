@@ -19,10 +19,10 @@ I have also made an Android version: [Android Firmadetaljer](https://github.com/
 
 ## Screenshots
 
-![view_searched_company_light](https://user-images.githubusercontent.com/13121494/64926576-65704680-d7ff-11e9-950c-df9adcbcc812.png)
+![Simulator Screen Shot - iPad Pro (12 9-inch) (3rd generation) - 2019-09-19 at 22 25 41](https://user-images.githubusercontent.com/13121494/65363836-406c4100-dc0e-11e9-9765-d3418efa269d.png)
 
-![view_searched_company_dark](https://user-images.githubusercontent.com/13121494/64926577-673a0a00-d7ff-11e9-8617-c7aeb34765e1.png)
+![Simulator Screen Shot - iPad Pro (12 9-inch) (3rd generation) - 2019-09-19 at 22 26 55](https://user-images.githubusercontent.com/13121494/65363841-42360480-dc0e-11e9-8c5d-5dce3e22fb34.png)
 
-![saved_companies_light_iphone](https://user-images.githubusercontent.com/13121494/65169430-c9388080-da46-11e9-86de-373b5918871a.png)
+![saved_companies_light_iphone](https://user-images.githubusercontent.com/13121494/65363685-78bf4f80-dc0d-11e9-9629-191a5786c815.png)
 
-![company_details_light_iphone](https://user-images.githubusercontent.com/13121494/65169439-cccc0780-da46-11e9-9727-85f5f8ec49ec.png)
+![company_details_light_iphone](https://user-images.githubusercontent.com/13121494/65363686-7b21a980-dc0d-11e9-8e55-a0ee464baea3.png)
