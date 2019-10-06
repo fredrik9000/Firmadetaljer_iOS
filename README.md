@@ -4,7 +4,7 @@ This is an iOS application written in Swift where you can search for information
 
 I have also made an Android version: [Android Firmadetaljer](https://github.com/fredrik9000/Firmadetaljer_Android)
 
-**The app has the following features:**
+#### The app has the following features:
 
 - Search for companies by name
 - Search for companies by organization number
@@ -16,6 +16,11 @@ I have also made an Android version: [Android Firmadetaljer](https://github.com/
 - Dark mode
 - The app supports English and Norwegian languages
 
+#### Potential improvements:
+
+- Show location for a given firm on a map.
+- Add a way to filter search by zip code or company size.
+- The maximum number of companies returned by the API is 100. Add pagination behaviour so that more data is retrieved as the user scrolls.
 
 ## Screenshots
 
