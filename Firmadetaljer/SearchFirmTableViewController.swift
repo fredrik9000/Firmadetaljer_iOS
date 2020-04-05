@@ -163,10 +163,9 @@ class SearchFirmTableViewController: UITableViewController {
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
         var url :String
         if (scope == FilterConstants.orgNumberScope) {
-            url = "http://data.brreg.no/enhetsregisteret/enhet/\(searchText).json"
+            url = "http://data.brreg.no/enhetsregisteret/api/enheter/\(searchText)"
         } else {
-            let filter = "$filter=startswith(navn,'\(searchText)')"
-            url = "http://data.brreg.no/enhetsregisteret/enhet.json?" + filter
+            url = "http://data.brreg.no/enhetsregisteret/api/enheter?navn=\(searchText)"
         }
         
         guard let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else { print("Couldn't encode URL"); return }

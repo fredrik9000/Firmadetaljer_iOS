@@ -11,25 +11,25 @@ import Foundation
 
 class Company: Codable, Hashable {
     
-    var organisasjonsnummer:Int?
+    var organisasjonsnummer:String?
     var navn:String?
     var stiftelsesdato:String?
     var registreringsdatoEnhetsregisteret:String?
     var oppstartsdato:String?
     var datoEierskifte:String?
-    var organisasjonsform:String?
+    var organisasjonsform:Organisasjonsform?
     var hjemmeside:String?
-    var registrertIFrivillighetsregisteret:String?
-    var registrertIMvaregisteret:String?
-    var registrertIForetaksregisteret:String?
-    var registrertIStiftelsesregisteret:String?
-    var frivilligRegistrertIMvaregisteret:String?
+    var registrertIFrivillighetsregisteret:Bool?
+    var registrertIMvaregisteret:Bool?
+    var registrertIForetaksregisteret:Bool?
+    var registrertIStiftelsesregisteret:Bool?
+    var frivilligRegistrertIMvaregisteret:Bool?
     var antallAnsatte:Int?
     var sisteInnsendteAarsregnskap: Int?
-    var konkurs: String?
-    var underAvvikling: String?
-    var underTvangsavviklingEllerTvangsopplosning: String?
-    var overordnetEnhet:Int?
+    var konkurs: Bool?
+    var underAvvikling: Bool?
+    var underTvangsavviklingEllerTvangsopplosning: Bool?
+    var overordnetEnhet:String?
     var institusjonellSektorkode:InstitusjonellSektorkode?
     var naeringskode1:Naeringskode?
     var naeringskode2:Naeringskode?
@@ -65,4 +65,9 @@ class Adresse: Codable {
     var kommune: String?
     var landkode: String?
     var land: String?
+}
+
+class Organisasjonsform: Codable {
+    var kode: String?
+    var beskrivelse: String?
 }

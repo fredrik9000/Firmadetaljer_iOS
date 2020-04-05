@@ -79,7 +79,6 @@ class FirmDetailsTableViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-
         super.viewDidLoad()
         
         tableView.tableFooterView = UIView(frame: .zero)
@@ -87,7 +86,6 @@ class FirmDetailsTableViewController: UITableViewController {
         var mainSection = SectionCellData(header: NSLocalizedString("Detail-Section", comment: ""))
         
         if let navn = company?.navn {
-            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-FirmName", comment: ""), description: navn))
             self.title = navn
         }
         
@@ -95,12 +93,32 @@ class FirmDetailsTableViewController: UITableViewController {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Org.number", comment: ""), description: String(orgnr)))
         }
         
+        if let hjemmeside = company?.hjemmeside {
+            let hjemmesideCell = buildCell(NSLocalizedString("Detail-Website", comment: ""), description: hjemmeside)
+            hjemmesideCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+            mainSection.cells.append(hjemmesideCell)
+        }
+        
+        if let overordnetEnhet = company?.overordnetEnhet {
+            let overordnetEnhetCell = buildCell(NSLocalizedString("Detail-Parent", comment: ""), description: overordnetEnhet)
+            overordnetEnhetCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+            mainSection.cells.append(overordnetEnhetCell)
+        }
+        
         if let stiftelsesdato = company?.stiftelsesdato {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-DateOfEstablishment", comment: ""), description: stiftelsesdato))
         }
         
+        if let organisasjonsform = company?.organisasjonsform?.beskrivelse {
+            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-OrganizationalForm", comment: ""), description: organisasjonsform))
+        }
+        
+        if let antallAnsatte = company?.antallAnsatte {
+            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Employees", comment: ""), description: String(antallAnsatte)))
+        }
+        
         if let registreringsdatoEnhetsregisteret = company?.registreringsdatoEnhetsregisteret {
-            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Enhetsregisteret", comment: ""), description: decodeYesOrNo(registreringsdatoEnhetsregisteret)))
+            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Enhetsregisteret", comment: ""), description: registreringsdatoEnhetsregisteret))
         }
         
         if let oppstartsdato = company?.oppstartsdato {
@@ -109,16 +127,6 @@ class FirmDetailsTableViewController: UITableViewController {
         
         if let datoEierskifte = company?.datoEierskifte {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-ChangeOfOwnershipDate", comment: ""), description: datoEierskifte))
-        }
-        
-        if let organisasjonsform = company?.organisasjonsform {
-            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-OrganizationalForm", comment: ""), description: organisasjonsform))
-        }
-        
-        if let hjemmeside = company?.hjemmeside {
-            let hjemmesideCell = buildCell(NSLocalizedString("Detail-Website", comment: ""), description: hjemmeside)
-            hjemmesideCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
-            mainSection.cells.append(hjemmesideCell)
         }
         
         if let registrertIFrivillighetsregisteret = company?.registrertIFrivillighetsregisteret {
@@ -141,10 +149,6 @@ class FirmDetailsTableViewController: UITableViewController {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Mvaregisteret-Voluntarily", comment: ""), description: decodeYesOrNo(frivilligRegistrertIMvaregisteret)))
         }
         
-        if let antallAnsatte = company?.antallAnsatte {
-            mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-Employees", comment: ""), description: String(antallAnsatte)))
-        }
-        
         if let sisteInnsendteAarsregnskap = company?.sisteInnsendteAarsregnskap {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-LatestSubmittedAnnualAccounts", comment: ""), description: String(sisteInnsendteAarsregnskap)))
         }
@@ -161,13 +165,25 @@ class FirmDetailsTableViewController: UITableViewController {
             mainSection.cells.append(buildNonInteractiveCell(NSLocalizedString("Detail-ForcedResolution", comment: ""), description: decodeYesOrNo(underTvangsavviklingEllerTvangsopplosning)))
         }
         
-        if let overordnetEnhet = company?.overordnetEnhet {
-            let overordnetEnhetCell = buildCell(NSLocalizedString("Detail-Parent", comment: ""), description: String(overordnetEnhet))
-            overordnetEnhetCell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
-            mainSection.cells.append(overordnetEnhetCell)
+        sections.append(mainSection)
+        
+        if let postadresse = company?.postadresse {
+            var postadresseSection = SectionCellData(header: NSLocalizedString("PostalAddress-Section", comment: ""))
+            postadresseSection.cells = buildAdressCells(postadresse)
+            sections.append(postadresseSection)
         }
         
-        sections.append(mainSection)
+        if let forretningsadresse = company?.forretningsadresse {
+            var forretningsadresseSection = SectionCellData(header: NSLocalizedString("BusinessAddress-Section", comment: ""))
+            forretningsadresseSection.cells = buildAdressCells(forretningsadresse)
+            sections.append(forretningsadresseSection)
+        }
+        
+        if let beliggenhetsadresse = company?.beliggenhetsadresse {
+            var beliggenhetsadresseSection = SectionCellData(header: NSLocalizedString("LocationAddress-Section", comment: ""))
+            beliggenhetsadresseSection.cells = buildAdressCells(beliggenhetsadresse)
+            sections.append(beliggenhetsadresseSection)
+        }
         
         if let institusjonellSektorkode = company?.institusjonellSektorkode {
             var sektorkodeSection = SectionCellData(header: NSLocalizedString("InstitutionalSectorCode-Section", comment: ""))
@@ -200,25 +216,6 @@ class FirmDetailsTableViewController: UITableViewController {
             naeringskode3Section.cells = buildNaeringskodeCells(naeringskode3)
             sections.append(naeringskode3Section)
         }
-        
-        if let postadresse = company?.postadresse {
-            var postadresseSection = SectionCellData(header: NSLocalizedString("PostalAddress-Section", comment: ""))
-            postadresseSection.cells = buildAdressCells(postadresse)
-            sections.append(postadresseSection)
-        }
-        
-        if let forretningsadresse = company?.forretningsadresse {
-            var forretningsadresseSection = SectionCellData(header: NSLocalizedString("BusinessAddress-Section", comment: ""))
-            forretningsadresseSection.cells = buildAdressCells(forretningsadresse)
-            sections.append(forretningsadresseSection)
-        }
-        
-        if let beliggenhetsadresse = company?.beliggenhetsadresse {
-            var beliggenhetsadresseSection = SectionCellData(header: NSLocalizedString("LocationAddress-Section", comment: ""))
-            beliggenhetsadresseSection.cells = buildAdressCells(beliggenhetsadresse)
-            sections.append(beliggenhetsadresseSection)
-        }
-        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -266,8 +263,8 @@ class FirmDetailsTableViewController: UITableViewController {
         }
     }
     
-    private func showParentCompany(_ organisasjonsnummer: Int) {
-        guard let encodedURL = "http://data.brreg.no/enhetsregisteret/enhet/\(organisasjonsnummer).json".addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else {
+    private func showParentCompany(_ organisasjonsnummer: String) {
+        guard let encodedURL = "http://data.brreg.no/enhetsregisteret/api/enheter/\(organisasjonsnummer)".addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else {
             print("Couldn't encode URL"); return
         }
         JSONUtil.retrieveCompany(encodedURL) { self.navigateToParentCompany($0) }
@@ -285,13 +282,11 @@ class FirmDetailsTableViewController: UITableViewController {
         }
     }
     
-    private func decodeYesOrNo(_ description: String) -> String {
-        if description == "J" {
+    private func decodeYesOrNo(_ description: Bool) -> String {
+        if description {
             return NSLocalizedString("Yes", comment: "")
-        } else if description == "N" {
-            return NSLocalizedString("No", comment: "")
         } else {
-            return description
+            return NSLocalizedString("No", comment: "")
         }
     }
     

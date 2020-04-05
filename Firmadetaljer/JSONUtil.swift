@@ -27,7 +27,7 @@ class JSONUtil {
                 parseData(data)
             } else {
                 if isOrgNumberSearch {
-                    print("Error loading data / company not found") //Invalid company number triggers this.
+                    print("Error loading data / company not found") // Invalid company number triggers this.
                     parseData(nil) // Want to clear the screen if org. number isn't found.
                 } else {
                     print("Error loading data")
@@ -90,9 +90,11 @@ class JSONUtil {
         do{
             let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments) as! [String: Any]
             
-            if let dataArray = json["data"] as? [[String: AnyObject]] {
-                for data in dataArray {
-                    companies.append(CompanyUtil.populateCompany(data))
+            if let embeddedDictionary = json["_embedded"] as? [String: AnyObject] {
+                if let enheterArray = embeddedDictionary["enheter"] as? [[String: AnyObject]] {
+                    for data in enheterArray {
+                        companies.append(CompanyUtil.populateCompany(data))
+                    }
                 }
             }
             return (companies, true)
