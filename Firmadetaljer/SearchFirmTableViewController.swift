@@ -16,7 +16,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
         // This will also be triggered after clicking away the alert message in case of a parse error,
         // so the same search should not be performed twice as it is not needed.
         if newSearchText != oldSearchText && isValidSearchQuery(searchText: newSearchText) {
-            filterContentForSearchText(searchText: searchController.searchBar.text!, scope:currentScope)
+            filterContentForSearchText(searchText: searchController.searchBar.text!, scope: currentScope)
         } else if newSearchText.count == 0 {
             // In case the search field is blank, show last view companies.
             // If the tableview style is .grouped it is already being viewed.
@@ -68,7 +68,7 @@ class SearchFirmTableViewController: UITableViewController {
     
     private var filteredCompanies = [Company]()
     let searchController = UISearchController(searchResultsController: nil)
-    var detailViewController: FirmDetailsTableViewController? = nil
+    var detailViewController: FirmDetailsTableViewController?
     private var currentScope = FilterConstants.searchFirmScope // Initial scope
     private var oldSearchText = "" // Initial search text
     private var resultsTableView: UITableView!
@@ -93,7 +93,7 @@ class SearchFirmTableViewController: UITableViewController {
             in: .userDomainMask,
             appropriateFor: nil,
             create: true
-            ).appendingPathComponent("last_viewed_companies.json") {
+        ).appendingPathComponent("last_viewed_companies.json") {
             if let jsonData = try? Data(contentsOf: url), let savedSearchHistory = CompaniesViewedHistory(json: jsonData) {
                 lastViewedCompanies = savedSearchHistory
             }
@@ -117,20 +117,27 @@ class SearchFirmTableViewController: UITableViewController {
         searchController.searchBar.scopeButtonTitles = [FilterConstants.searchFirmScope, FilterConstants.orgNumberScope]
         searchController.searchBar.delegate = self
         searchController.delegate = self
-
-        //Metrics used for result and last viewed companies table views
+        
+        // Metrics used for result and last viewed companies table views
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
         
         // Set up table view used for results when searching
-        resultsTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight))
+        resultsTableView = UITableView(frame: CGRect(x: 0,
+                                                     y: barHeight,
+                                                     width: displayWidth,
+                                                     height: displayHeight - barHeight))
         resultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ResultCell")
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         
         // Set up table view used for search history
-        lastViewedCompaniesTableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight - barHeight), style: .grouped)
+        lastViewedCompaniesTableView = UITableView(frame: CGRect(x: 0,
+                                                                 y: barHeight,
+                                                                 width: displayWidth,
+                                                                 height: displayHeight - barHeight),
+                                                   style: .grouped)
         lastViewedCompaniesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "PreviouslyViewedCompanyCell")
         lastViewedCompaniesTableView.dataSource = self
         lastViewedCompaniesTableView.delegate = self
@@ -161,19 +168,24 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
-        var url :String
-        if (scope == FilterConstants.orgNumberScope) {
+        var url: String
+        if scope == FilterConstants.orgNumberScope {
             url = "http://data.brreg.no/enhetsregisteret/api/enheter/\(searchText)"
         } else {
             url = "http://data.brreg.no/enhetsregisteret/api/enheter?navn=\(searchText)"
         }
         
-        guard let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else { print("Couldn't encode URL"); return }
+        guard let encodedURL = url.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) else {
+            print("Couldn't encode URL"); return
+        }
         
         if !activityIndicator.isAnimating {
             self.activityIndicator.startAnimating()
         }
-        JSONUtil.retrieveCompanies(encodedURL, isOrgNumberSearch: scope == FilterConstants.orgNumberScope) { self.handleCompaniesSearchResult($0) }
+        
+        JSONUtil.retrieveCompanies(encodedURL, isOrgNumberSearch: scope == FilterConstants.orgNumberScope) {
+            self.handleCompaniesSearchResult($0)
+        }
     }
     
     private func handleCompaniesSearchResult(_ companies: [Company]?) {
@@ -186,15 +198,16 @@ class SearchFirmTableViewController: UITableViewController {
             }
             self.tableView.reloadData()
         } else {
-            let alertTitle:String
-            let alertMessage:String
-            if (self.currentScope == FilterConstants.orgNumberScope) {
+            let alertTitle: String
+            let alertMessage: String
+            if self.currentScope == FilterConstants.orgNumberScope {
                 alertTitle = NSLocalizedString("CompanyNotFoundTitle", comment: "")
-                alertMessage = NSLocalizedString("CompanyNotFoundMessage", comment: "") //Wrong org. number is the most likely issue.
+                alertMessage = NSLocalizedString("CompanyNotFoundMessage", comment: "") // Wrong org. number is the most likely issue.
             } else {
                 alertTitle = NSLocalizedString("ErrorLoadingDataTitle", comment: "")
                 alertMessage = NSLocalizedString("ErrorLoadingDataMessage", comment: "")
             }
+            
             let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -211,22 +224,29 @@ class SearchFirmTableViewController: UITableViewController {
                 } else {
                     company = lastViewedCompanies.companies[indexPath.row]
                 }
+                
                 let controller = (segue.destination as! UINavigationController).topViewController as! FirmDetailsTableViewController
                 controller.company = company
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                
                 if lastViewedCompanies.companies.contains(company) {
                     lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.firstIndex(of: company)!)
                     if self.tableView.style == .grouped && indexPath.row != 0 {
                         tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.top)
                     }
                 }
+                
                 lastViewedCompanies.companies.insert(company, at: 0)
                 saveList()
+                
                 if self.tableView.style == .grouped {
                     if indexPath.row != 0 {
-                        tableView.insertRows(at:  [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.automatic)
-                        tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.top)
+                        tableView.insertRows(at: [IndexPath(row: 0, section: 0)],
+                                             with: UITableView.RowAnimation.automatic)
+                        tableView.selectRow(at: IndexPath(row: 0, section: 0),
+                                            animated: true,
+                                            scrollPosition: UITableView.ScrollPosition.top)
                     }
                 }
             }
@@ -284,7 +304,7 @@ class SearchFirmTableViewController: UITableViewController {
                 in: .userDomainMask,
                 appropriateFor: nil,
                 create: true
-                ).appendingPathComponent("last_viewed_companies.json") {
+            ).appendingPathComponent("last_viewed_companies.json") {
                 do {
                     try json.write(to: url)
                 } catch let error {

@@ -11,19 +11,19 @@ import UIKit
 class FirmDetailsTableViewController: UITableViewController {
     
     var company: Company?
-
+    
     private struct SectionCellData {
         var cells = [UITableViewCell]()
-        var header:String
+        var header: String
         
-        init (header:String) {
+        init (header: String) {
             self.header = header
         }
     }
     
     private var sections = [SectionCellData]()
     
-    private func buildCell(_ name:String, description:String) -> UITableViewCell {
+    private func buildCell(_ name: String, description: String) -> UITableViewCell {
         let cell = UITableViewCell.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "Cell")
         cell.textLabel?.text = name
         cell.detailTextLabel?.text = description
@@ -31,14 +31,14 @@ class FirmDetailsTableViewController: UITableViewController {
     }
     
     // Most cells are not interactive, except for when navigating to the homepage or parent company
-    private func buildNonInteractiveCell(_ name:String, description:String) -> UITableViewCell {
+    private func buildNonInteractiveCell(_ name: String, description: String) -> UITableViewCell {
         let cell = buildCell(name, description: description)
         cell.isUserInteractionEnabled = false
         return cell
     }
     
-    private func buildNaeringskodeCells(_ companyNaeringskode:Naeringskode) -> [UITableViewCell] {
-        var naeringskodeCellsArray = Array<UITableViewCell>()
+    private func buildNaeringskodeCells(_ companyNaeringskode: Naeringskode) -> [UITableViewCell] {
+        var naeringskodeCellsArray = [UITableViewCell]()
         
         if let kode = companyNaeringskode.kode {
             naeringskodeCellsArray.append(buildNonInteractiveCell(NSLocalizedString("Naeringskode-Code", comment: ""), description: kode))
@@ -50,8 +50,8 @@ class FirmDetailsTableViewController: UITableViewController {
         return naeringskodeCellsArray
     }
     
-    private func buildAdressCells(_ companyAddress:Adresse) -> [UITableViewCell] {
-        var addressCellsArray = Array<UITableViewCell>()
+    private func buildAdressCells(_ companyAddress: Adresse) -> [UITableViewCell] {
+        var addressCellsArray = [UITableViewCell]()
         
         if let adresse = companyAddress.adresse {
             addressCellsArray.append(buildNonInteractiveCell(NSLocalizedString("Adresse-Address", comment: ""), description: adresse))
@@ -272,10 +272,10 @@ class FirmDetailsTableViewController: UITableViewController {
     
     private func navigateToParentCompany(_ company: Company?) {
         if let comp = company {
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "FirmDetailsController") as! FirmDetailsTableViewController
-            vc.company = comp
-            self.navigationController?.pushViewController(vc, animated: true)
-        }  else {
+            let firmDetailsTableViewController = self.storyboard?.instantiateViewController(withIdentifier: "FirmDetailsController") as! FirmDetailsTableViewController
+            firmDetailsTableViewController.company = comp
+            self.navigationController?.pushViewController(firmDetailsTableViewController, animated: true)
+        } else {
             let alert = UIAlertController(title: NSLocalizedString("ErrorLoadingDataTitle", comment: ""), message: NSLocalizedString("ErrorLoadingDataMessage", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)

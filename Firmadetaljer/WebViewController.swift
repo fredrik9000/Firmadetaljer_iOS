@@ -10,11 +10,11 @@ import UIKit
 import WebKit
 
 class WebViewController: UIViewController, WKNavigationDelegate {
-
+    
     @IBOutlet private weak var webView: WKWebView!
     private var activityIndicator: UIActivityIndicatorView!
     var urlString: String!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,7 +29,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         let urlRequest = URLRequest(url: url)
         webView.load(urlRequest)
     }
- 
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         self.activityIndicator.stopAnimating()
     }
@@ -42,9 +42,10 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         handleError(error)
     }
     
-    private func handleError(_ error : Error) {
+    private func handleError(_ error: Error) {
         self.activityIndicator.stopAnimating()
-        let alert = UIAlertController(title: NSLocalizedString("ErrorLoadingDataTitle", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("ErrorLoadingDataTitle", comment: ""),
+                                      message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

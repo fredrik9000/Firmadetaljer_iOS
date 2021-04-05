@@ -11,32 +11,32 @@ import Foundation
 
 class Company: Codable, Hashable {
     
-    var organisasjonsnummer:String?
-    var navn:String?
-    var stiftelsesdato:String?
-    var registreringsdatoEnhetsregisteret:String?
-    var oppstartsdato:String?
-    var datoEierskifte:String?
-    var organisasjonsform:Organisasjonsform?
-    var hjemmeside:String?
-    var registrertIFrivillighetsregisteret:Bool?
-    var registrertIMvaregisteret:Bool?
-    var registrertIForetaksregisteret:Bool?
-    var registrertIStiftelsesregisteret:Bool?
-    var frivilligRegistrertIMvaregisteret:Bool?
-    var antallAnsatte:Int?
+    var organisasjonsnummer: String?
+    var navn: String?
+    var stiftelsesdato: String?
+    var registreringsdatoEnhetsregisteret: String?
+    var oppstartsdato: String?
+    var datoEierskifte: String?
+    var organisasjonsform: Organisasjonsform?
+    var hjemmeside: String?
+    var registrertIFrivillighetsregisteret: Bool?
+    var registrertIMvaregisteret: Bool?
+    var registrertIForetaksregisteret: Bool?
+    var registrertIStiftelsesregisteret: Bool?
+    var frivilligRegistrertIMvaregisteret: Bool?
+    var antallAnsatte: Int?
     var sisteInnsendteAarsregnskap: Int?
     var konkurs: Bool?
     var underAvvikling: Bool?
     var underTvangsavviklingEllerTvangsopplosning: Bool?
-    var overordnetEnhet:String?
-    var institusjonellSektorkode:InstitusjonellSektorkode?
-    var naeringskode1:Naeringskode?
-    var naeringskode2:Naeringskode?
-    var naeringskode3:Naeringskode?
-    var postadresse:Adresse?
-    var forretningsadresse:Adresse?
-    var beliggenhetsadresse:Adresse?
+    var overordnetEnhet: String?
+    var institusjonellSektorkode: InstitusjonellSektorkode?
+    var naeringskode1: Naeringskode?
+    var naeringskode2: Naeringskode?
+    var naeringskode3: Naeringskode?
+    var postadresse: Adresse?
+    var forretningsadresse: Adresse?
+    var beliggenhetsadresse: Adresse?
     
     static func == (lhs: Company, rhs: Company) -> Bool {
         return lhs.organisasjonsnummer == rhs.organisasjonsnummer

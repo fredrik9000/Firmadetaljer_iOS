@@ -12,15 +12,10 @@ class JSONUtil {
     
     private static var url = ""
     
-    static private func retrieveData(_ url:String, isOrgNumberSearch:Bool, parseData:@escaping (Data?)->Void) {
+    static private func retrieveData(_ url: String, isOrgNumberSearch: Bool, parseData: @escaping (Data?) -> Void) {
         JSONUtil.url = url
-        let requestURL = URL(string: url)!
-        let urlRequest = URLRequest(url: requestURL)
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: urlRequest) {
-            (data, response, error) -> Void in
-            
+
+        URLSession.shared.dataTask(with: URLRequest(url: URL(string: url)!)) { (data, response, _) -> Void in
             let httpResponse = response as? HTTPURLResponse
             
             if httpResponse?.statusCode == 200 {
@@ -34,51 +29,47 @@ class JSONUtil {
                     parseData(nil)
                 }
             }
-        }
-        
-        task.resume()
+        }.resume()
     }
     
-    static func retrieveCompany(_ url:String, callback:@escaping (Company?)->Void) {
-        retrieveData(url, isOrgNumberSearch: false)
-        {
+    static func retrieveCompany(_ url: String, callback: @escaping (Company?) -> Void) {
+        retrieveData(url, isOrgNumberSearch: false) {
             if $0 == nil {
-                callCallbackIfMostRecentRequest(url: url) { callback(nil) } // Error loading data or company not found
+                runCallbackOnMainQueue(url: url) { callback(nil) } // Error loading data or company not found
             } else {
                 let (companyParsed, parsingSuccessful) = JSONUtil.parseCompany($0)
                 if parsingSuccessful {
-                    print("Parsing complete");
-                    callCallbackIfMostRecentRequest(url: url) { callback(companyParsed) }
+                    print("Parsing complete")
+                    runCallbackOnMainQueue(url: url) { callback(companyParsed) }
                 } else {
-                    callCallbackIfMostRecentRequest(url: url) { callback(nil) } // Parsing error
+                    runCallbackOnMainQueue(url: url) { callback(nil) } // Parsing error
                 }
             }
         }
     }
     
-    static func retrieveCompanies(_ url:String, isOrgNumberSearch:Bool, callback:@escaping ([Company]?)->Void) {
-        retrieveData(url, isOrgNumberSearch: isOrgNumberSearch)
-        {
+    static func retrieveCompanies(_ url: String, isOrgNumberSearch: Bool, callback: @escaping ([Company]?) -> Void) {
+        retrieveData(url, isOrgNumberSearch: isOrgNumberSearch) {
             if $0 == nil {
-                callCallbackIfMostRecentRequest(url: url) { callback(nil) } // Error loading data or company not found
+                runCallbackOnMainQueue(url: url) { callback(nil) } // Error loading data or company not found
             } else {
                 if isOrgNumberSearch {
                     let (company, parsingSuccessful) = JSONUtil.parseCompany($0)
                     if parsingSuccessful {
-                        print("Parsing complete");
-                        callCallbackIfMostRecentRequest(url: url) { callback([company]) }
+                        print("Parsing complete")
+                        runCallbackOnMainQueue(url: url) { callback([company]) }
                     } else {
                         print("Error with parsing data")
-                        callCallbackIfMostRecentRequest(url: url) { callback(nil) } // Parsing error
+                        runCallbackOnMainQueue(url: url) { callback(nil) } // Parsing error
                     }
                 } else {
                     let (companies, parsingSuccessful) = JSONUtil.parseCompanies($0)
                     if parsingSuccessful {
                         print("Parsing complete")
-                        callCallbackIfMostRecentRequest(url: url) { callback(companies) }
+                        runCallbackOnMainQueue(url: url) { callback(companies) }
                     } else {
                         print("Error with parsing data")
-                        callCallbackIfMostRecentRequest(url: url) { callback(nil) } // Parsing error
+                        runCallbackOnMainQueue(url: url) { callback(nil) } // Parsing error
                     }
                 }
             }
@@ -87,8 +78,8 @@ class JSONUtil {
     
     static private func parseCompanies(_ data: Data?) -> ([Company], Bool) {
         var companies = [Company]()
-        do{
-            let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments) as! [String: Any]
+        do {
+            let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String: Any]
             
             if let embeddedDictionary = json["_embedded"] as? [String: AnyObject] {
                 if let enheterArray = embeddedDictionary["enheter"] as? [[String: AnyObject]] {
@@ -105,8 +96,8 @@ class JSONUtil {
     
     static private func parseCompany(_ data: Data?) -> (Company, Bool) {
         var company = Company()
-        do{
-            let json = try JSONSerialization.jsonObject(with: data!, options:.allowFragments)
+        do {
+            let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments)
             if let data = json as? [String: AnyObject] {
                 company = CompanyUtil.populateCompany(data)
             }
@@ -116,9 +107,9 @@ class JSONUtil {
         }
     }
     
-    static private func callCallbackIfMostRecentRequest(url:String, callback:@escaping ()->Void) {
+    static private func runCallbackOnMainQueue(url: String, callback: @escaping () -> Void) {
         if JSONUtil.url == url {
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 callback()
             }
         }

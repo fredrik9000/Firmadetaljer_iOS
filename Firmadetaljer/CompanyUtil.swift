@@ -10,7 +10,7 @@ import Foundation
 
 class CompanyUtil {
     
-    static func populateCompany(_ data:[String:AnyObject]) -> Company {
+    static func populateCompany(_ data: [String: AnyObject]) -> Company {
         let company = Company()
         company.navn = data["navn"] as? String ?? nil
         company.organisasjonsnummer = data["organisasjonsnummer"] as? String ?? nil
@@ -31,41 +31,41 @@ class CompanyUtil {
         company.underTvangsavviklingEllerTvangsopplosning = data["underTvangsavviklingEllerTvangsopplosning"] as? Bool ?? nil
         company.overordnetEnhet = data["overordnetEnhet"] as? String ?? nil
         
-        if let organisasjonsform = data["organisasjonsform"] as? Dictionary<String, AnyObject> {
+        if let organisasjonsform = data["organisasjonsform"] as? [String: AnyObject] {
             company.organisasjonsform?.beskrivelse = organisasjonsform["beskrivelse"] as? String ?? nil
         }
         
-        if let institusjonellSektorkode = data["institusjonellSektorkode"] as? Dictionary<String, AnyObject> {
+        if let institusjonellSektorkode = data["institusjonellSektorkode"] as? [String: AnyObject] {
             company.institusjonellSektorkode?.kode = institusjonellSektorkode["kode"] as? Int ?? nil
             company.institusjonellSektorkode?.beskrivelse = institusjonellSektorkode["beskrivelse"] as? String ?? nil
         }
         
-        if let naeringskode1 = data["naeringskode1"] as? Dictionary<String, String> {
+        if let naeringskode1 = data["naeringskode1"] as? [String: String] {
             company.naeringskode1 = Naeringskode()
             populateNaeringskode(company.naeringskode1!, data: naeringskode1)
         }
         
-        if let naeringskode2 = data["naeringskode2"] as? Dictionary<String, String> {
+        if let naeringskode2 = data["naeringskode2"] as? [String: String] {
             company.naeringskode2 = Naeringskode()
             populateNaeringskode(company.naeringskode2!, data: naeringskode2)
         }
         
-        if let naeringskode3 = data["naeringskode3"] as? Dictionary<String, String> {
+        if let naeringskode3 = data["naeringskode3"] as? [String: String] {
             company.naeringskode3 = Naeringskode()
             populateNaeringskode(company.naeringskode3!, data: naeringskode3)
         }
         
-        if let postadresse = data["postadresse"] as? Dictionary<String, AnyObject> {
+        if let postadresse = data["postadresse"] as? [String: AnyObject] {
             company.postadresse = Adresse()
             populateAddress(company.postadresse!, addressData: postadresse)
         }
         
-        if let forretningsadresse = data["forretningsadresse"] as? Dictionary<String, AnyObject> {
+        if let forretningsadresse = data["forretningsadresse"] as? [String: AnyObject] {
             company.forretningsadresse = Adresse()
             populateAddress(company.forretningsadresse!, addressData: forretningsadresse)
         }
         
-        if let beliggenhetsadresse = data["beliggenhetsadresse"] as? Dictionary<String, AnyObject> {
+        if let beliggenhetsadresse = data["beliggenhetsadresse"] as? [String: AnyObject] {
             company.beliggenhetsadresse = Adresse()
             populateAddress(company.beliggenhetsadresse!, addressData: beliggenhetsadresse)
         }
@@ -73,12 +73,12 @@ class CompanyUtil {
         return company
     }
     
-    static private func populateNaeringskode(_ companyNaeringskode:Naeringskode, data:Dictionary<String, String>) {
+    static private func populateNaeringskode(_ companyNaeringskode: Naeringskode, data: [String: String]) {
         companyNaeringskode.kode = data["kode"]
         companyNaeringskode.beskrivelse = data["beskrivelse"]
     }
     
-    static private func populateAddress(_ companyAddress:Adresse, addressData:Dictionary<String, AnyObject>) {
+    static private func populateAddress(_ companyAddress: Adresse, addressData: [String: AnyObject]) {
         companyAddress.postnummer = addressData["postnummer"] as? Int ?? nil
         companyAddress.adresse = buildAddressString(addressData["adresse"] as? [String])
         companyAddress.poststed = addressData["poststed"] as? String ?? nil
@@ -89,10 +89,10 @@ class CompanyUtil {
     }
     
     static private func buildAddressString(_ address: [String]?) -> String? {
-        if (address == nil || address?.count == 0) {
+        if address == nil || address?.count == 0 {
             return nil
         } else {
-            return address!.joined(separator:", ")
+            return address!.joined(separator: ", ")
         }
     }
 }
