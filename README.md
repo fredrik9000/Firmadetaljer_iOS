@@ -23,11 +23,11 @@ I have also made an Android version: [Android Firmadetaljer](https://github.com/
 ![Simulator Screen Shot - iPad Pro (12 9-inch) (4th generation) - 2020-08-19 at 04 53 25](https://user-images.githubusercontent.com/13121494/90586921-90fe6c80-e1d8-11ea-94c1-0719dcbeff22.png)
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/13121494/90586926-92c83000-e1d8-11ea-89f8-bf2e8ad96791.png" width="414" />
-  <img src="https://user-images.githubusercontent.com/13121494/90586925-922f9980-e1d8-11ea-8e86-9cbfd31d2254.png" width="414" /> 
+  <img src="https://user-images.githubusercontent.com/13121494/90586926-92c83000-e1d8-11ea-89f8-bf2e8ad96791.png" width="412" />
+  <img src="https://user-images.githubusercontent.com/13121494/90586925-922f9980-e1d8-11ea-8e86-9cbfd31d2254.png" width="412" /> 
 </p>
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/13121494/90586924-922f9980-e1d8-11ea-9c22-ef136c9083b0.png" width="414" />
-  <img src="https://user-images.githubusercontent.com/13121494/90586923-91970300-e1d8-11ea-8422-1c08c5ede3f3.png" width="414" /> 
+  <img src="https://user-images.githubusercontent.com/13121494/90586924-922f9980-e1d8-11ea-9c22-ef136c9083b0.png" width="412" />
+  <img src="https://user-images.githubusercontent.com/13121494/90586923-91970300-e1d8-11ea-8422-1c08c5ede3f3.png" width="412" /> 
 </p>
