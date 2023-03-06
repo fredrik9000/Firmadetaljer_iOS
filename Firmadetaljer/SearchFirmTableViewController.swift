@@ -24,6 +24,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
                 self.tableView = lastViewedCompaniesTableView
             }
         }
+
         // Keep track of the last searched text
         oldSearchText = newSearchText
     }
@@ -32,6 +33,7 @@ extension SearchFirmTableViewController: UISearchResultsUpdating {
 extension SearchFirmTableViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         currentScope = searchBar.scopeButtonTitles![selectedScope]
+
         if currentScope == FilterConstants.orgNumberScope {
             searchBar.placeholder = NSLocalizedString("Org.numberPlaceholder", comment: "")
         } else {
@@ -59,6 +61,10 @@ extension SearchFirmTableViewController: UISearchControllerDelegate {
     }
 }
 
+// TODO: This view controller swaps table views depending on if the user is viewing search results or the last viewed companies.
+// The styles for these 2 views are different, plain for viewing search results and grouped for last viewed companies.
+// Since the styles are different, the style is used as an identifier for which view is currently set.
+// This is a confusing way to do things so it would be better to have a better identifier for the 2 different states.
 class SearchFirmTableViewController: UITableViewController {
     
     private struct FilterConstants {
@@ -105,7 +111,10 @@ class SearchFirmTableViewController: UITableViewController {
         
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? FirmDetailsTableViewController
+
+            self.detailViewController = (
+                controllers[controllers.count-1] as! UINavigationController
+            ).topViewController as? FirmDetailsTableViewController
         }
         
         // Set up the search controller
@@ -124,20 +133,29 @@ class SearchFirmTableViewController: UITableViewController {
         let displayHeight: CGFloat = self.view.frame.height
         
         // Set up table view used for results when searching
-        resultsTableView = UITableView(frame: CGRect(x: 0,
-                                                     y: barHeight,
-                                                     width: displayWidth,
-                                                     height: displayHeight - barHeight))
+        resultsTableView = UITableView(
+            frame: CGRect(
+                x: 0,
+                y: barHeight,
+                width: displayWidth,
+                height: displayHeight - barHeight
+            )
+        )
         resultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ResultCell")
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         
         // Set up table view used for search history
-        lastViewedCompaniesTableView = UITableView(frame: CGRect(x: 0,
-                                                                 y: barHeight,
-                                                                 width: displayWidth,
-                                                                 height: displayHeight - barHeight),
-                                                   style: .grouped)
+        lastViewedCompaniesTableView = UITableView(
+            frame: CGRect(
+                x: 0,
+                y: barHeight,
+                width: displayWidth,
+                height: displayHeight - barHeight
+            ),
+            style: .grouped
+        )
+
         lastViewedCompaniesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "PreviouslyViewedCompanyCell")
         lastViewedCompaniesTableView.dataSource = self
         lastViewedCompaniesTableView.delegate = self
@@ -163,8 +181,9 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     private func isValidSearchQuery(searchText: String) -> Bool {
-        return searchText.count > 1
-            && (currentScope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || searchText.count == 9)
+        return searchText.count > 1 && (
+            currentScope != NSLocalizedString("OrganizationNumberScopeButton", comment: "") || searchText.count == 9
+        )
     }
     
     private func filterContentForSearchText(searchText: String, scope: String = FilterConstants.searchFirmScope) {
@@ -190,16 +209,19 @@ class SearchFirmTableViewController: UITableViewController {
     
     private func handleCompaniesSearchResult(_ companies: [Company]?) {
         // When there is no error searching, keep track of filtered companies and reload the table view.
-        // Otherwise, show and error message.
+        // Otherwise, show an error message.
         if let comps = companies {
             self.filteredCompanies = comps
+
             if self.tableView.style == .grouped {
                 self.tableView = resultsTableView
             }
+
             self.tableView.reloadData()
         } else {
             let alertTitle: String
             let alertMessage: String
+
             if self.currentScope == FilterConstants.orgNumberScope {
                 alertTitle = NSLocalizedString("CompanyNotFoundTitle", comment: "")
                 alertMessage = NSLocalizedString("CompanyNotFoundMessage", comment: "") // Wrong org. number is the most likely issue.
@@ -212,44 +234,51 @@ class SearchFirmTableViewController: UITableViewController {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
+
         self.activityIndicator.stopAnimating()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showCompanyDetails" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let company: Company
-                if self.tableView.style == .plain {
-                    company = filteredCompanies[indexPath.row]
-                } else {
-                    company = lastViewedCompanies.companies[indexPath.row]
-                }
-                
-                let controller = (segue.destination as! UINavigationController).topViewController as! FirmDetailsTableViewController
-                controller.company = company
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true
-                
-                if lastViewedCompanies.companies.contains(company) {
-                    lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.firstIndex(of: company)!)
-                    if self.tableView.style == .grouped && indexPath.row != 0 {
-                        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.top)
-                    }
-                }
-                
-                lastViewedCompanies.companies.insert(company, at: 0)
-                saveList()
-                
-                if self.tableView.style == .grouped {
-                    if indexPath.row != 0 {
-                        tableView.insertRows(at: [IndexPath(row: 0, section: 0)],
-                                             with: UITableView.RowAnimation.automatic)
-                        tableView.selectRow(at: IndexPath(row: 0, section: 0),
-                                            animated: true,
-                                            scrollPosition: UITableView.ScrollPosition.top)
-                    }
-                }
+        guard segue.identifier == "showCompanyDetails" else { return }
+        
+        guard let indexPath = self.tableView.indexPathForSelectedRow else { return }
+
+        let company: Company
+
+        if self.tableView.style == .plain {
+            company = filteredCompanies[indexPath.row]
+        } else {
+            company = lastViewedCompanies.companies[indexPath.row]
+        }
+
+        let controller = (segue.destination as! UINavigationController).topViewController as! FirmDetailsTableViewController
+        controller.company = company
+        controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+        controller.navigationItem.leftItemsSupplementBackButton = true
+
+        if lastViewedCompanies.companies.contains(company) {
+            lastViewedCompanies.companies.remove(at: lastViewedCompanies.companies.firstIndex(of: company)!)
+
+            if self.tableView.style == .grouped && indexPath.row != 0 {
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.top)
             }
+        }
+
+        lastViewedCompanies.companies.insert(company, at: 0)
+
+        saveList()
+
+        if self.tableView.style == .grouped && indexPath.row != 0 {
+            tableView.insertRows(
+                at: [IndexPath(row: 0, section: 0)],
+                with: UITableView.RowAnimation.automatic
+            )
+
+            tableView.selectRow(
+                at: IndexPath(row: 0, section: 0),
+                animated: true,
+                scrollPosition: UITableView.ScrollPosition.top
+            )
         }
     }
     
@@ -275,6 +304,7 @@ class SearchFirmTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
+
         if self.tableView.style == .plain {
             cell = tableView.dequeueReusableCell(withIdentifier: "ResultCell", for: indexPath)
             
@@ -288,6 +318,7 @@ class SearchFirmTableViewController: UITableViewController {
                 cell.textLabel?.text = navn
             }
         }
+
         cell.accessoryType = .disclosureIndicator
         
         return cell
@@ -298,18 +329,18 @@ class SearchFirmTableViewController: UITableViewController {
     }
     
     func saveList() {
-        if let json = lastViewedCompanies.json {
-            if let url = try? FileManager.default.url(
-                for: .applicationSupportDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: true
-            ).appendingPathComponent("last_viewed_companies.json") {
-                do {
-                    try json.write(to: url)
-                } catch let error {
-                    print("Couldn't save \(error)")
-                }
+        guard let json = lastViewedCompanies.json else { return }
+
+        if let url = try? FileManager.default.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        ).appendingPathComponent("last_viewed_companies.json") {
+            do {
+                try json.write(to: url)
+            } catch let error {
+                print("Couldn't save \(error)")
             }
         }
     }

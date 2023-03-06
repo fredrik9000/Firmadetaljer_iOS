@@ -44,9 +44,14 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     
     private func handleError(_ error: Error) {
         self.activityIndicator.stopAnimating()
-        let alert = UIAlertController(title: NSLocalizedString("ErrorLoadingDataTitle", comment: ""),
-                                      message: error.localizedDescription, preferredStyle: .alert)
+
+        let alert = UIAlertController(
+            title: NSLocalizedString("ErrorLoadingDataTitle", comment: ""),
+            message: error.localizedDescription, preferredStyle: .alert
+        )
+
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
         self.present(alert, animated: true, completion: nil)
     }
 }
